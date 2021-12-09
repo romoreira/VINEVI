@@ -1,0 +1,2 @@
+time_stamp,cpu_util,ctx_switches,cpu_freq,momory_used,memory_swap_used,disk_used,disk_read_count,disk_write_count,temperature
+1639080525.026458,33.3,1108500,1500.0,6.4,0.0,20.2,29881,4876,44.303
