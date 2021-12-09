@@ -6,9 +6,10 @@ from pathlib import Path
 import torch.nn.functional as F
 import torch.nn as nn
 
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+print("CPU-based classification")
 
-
-know_classes = ['bittorrent', 'dns', 'IoT', 'voip']
+know_classes = ['bittorrent', 'brownsing','dns', 'IoT', 'rdp', 'ssh','voip']
 
 def initialize_model(model_name, num_classes, feature_extract, use_pretrained=True):
     # Inicializando cada variável específica para cada modelo
@@ -40,13 +41,14 @@ def cnn_start():
     input_size = 0
     model_name = "squeezenet"
     print("Initializing CNN Model...")
-    model, input_size = initialize_model(model_name, num_classes=4, feature_extract=True, use_pretrained=True)
+    model, input_size = initialize_model(model_name, num_classes=7, feature_extract=True, use_pretrained=True)
 
     # print("Model before load: \n"+(str(model)))
 
-    checkpoint = torch.load(Path('/home/ubuntu/vinevi/models_training/squeezenet-endovis.pth'))
+    checkpoint = torch.load(Path('/home/ubuntu/VINEVI/models_training/squeezenet.pth'), map_location='cpu')
     model.load_state_dict(checkpoint)
     model.eval()
+
     return model
 
 
@@ -68,7 +70,7 @@ def cnn_predict(image):
         transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
     ])
 
-    # image = Image.open(Path('/home/ubuntu/vinevi/video1235.png'))
+    image = Image.open(Path('/home/ubuntu/VINEVI/images_test/rdp260.png'))
     # print("Image Type Load: "+str(type(image)))
 
     input = train_transforms(image)
@@ -78,10 +80,10 @@ def cnn_predict(image):
     # print("Types last: "+str(type(input)))
 
     output = model(input)
-    # print("Output: \n"+str(type(output)))
+    print("Output: \n"+str(type(output)))
 
     prediction = output.max(1, keepdim=True)[1]
-    # print(prediction)
+    print(prediction)
 
     # print(model)
 
@@ -100,5 +102,6 @@ def cnn_predict(image):
 #    thread2 = threading.Thread(target=cnn_predict,args=(model,))
 #    thread2.start()
 
-# if __name__ == '__main__':
-#    main()
+if __name__ == '__main__':
+    none = ""
+    cnn_predict(none)
