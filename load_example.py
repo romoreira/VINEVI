@@ -5,9 +5,15 @@ from torchvision import datasets, models, transforms
 from pathlib import Path
 import torch.nn.functional as F
 import torch.nn as nn
+import sys
+from csv import writer
+import threading
+import time
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-print("CPU-based classification")
+#print("CPU-based classification")
+
+time_list = []
 
 know_classes = ['bittorrent', 'brownsing','dns', 'IoT', 'rdp', 'ssh','voip']
 
@@ -40,7 +46,7 @@ def cnn_start():
     model = 0
     input_size = 0
     model_name = "squeezenet"
-    print("Initializing CNN Model...")
+    #print("Initializing CNN Model...")
     model, input_size = initialize_model(model_name, num_classes=7, feature_extract=True, use_pretrained=True)
 
     # print("Model before load: \n"+(str(model)))
@@ -49,10 +55,23 @@ def cnn_start():
     model.load_state_dict(checkpoint)
     model.eval()
 
+    #get_cnn_complexity(model)
+
     return model
 
+def get_cnn_complexity(model):
+    from ptflops import get_model_complexity_info
+    macs, params = get_model_complexity_info(model, (3, 224, 224), as_strings=True, print_per_layer_stat=True, verbose=True)
+    print('{:<30}  {:<8}'.format('Computational complexity: ', macs))
+    print('{:<30}  {:<8}'.format('Number of parameters: ', params))
 
-def cnn_predict(image):
+def write_csv(register):
+    with open('exp_time_spent_on_prediction.csv', 'a') as f:
+        writer_object = writer(f)
+        writer_object.writerow(register)
+        f.close()
+
+def cnn_predict(image_name):
     # print("Imagem type: "+str(type(image)))
     model = cnn_start()
     train_transforms = transforms.Compose([
@@ -70,20 +89,28 @@ def cnn_predict(image):
         transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
     ])
 
-    image = Image.open(Path('/home/ubuntu/VINEVI/images_test/rdp260.png'))
+    image = Image.open(Path('/home/ubuntu/VINEVI/images_test/'+str(image_name)))
     # print("Image Type Load: "+str(type(image)))
 
     input = train_transforms(image)
-    print('types:', type(input))
-    print("Transformd Image: " + str(input.shape))
+    #print('types:', type(input))
+    #print("Transformd Image: " + str(input.shape))
     input = torch.unsqueeze(input, 0)
     # print("Types last: "+str(type(input)))
 
+
+    before_predict_time = time.time_ns()
     output = model(input)
-    print("Output: \n"+str(type(output)))
+    after_predict_time = time.time_ns()
+    time_list.append(before_predict_time)
+    time_list.append(after_predict_time)
+    time_list.append(after_predict_time - before_predict_time)
+    write_csv(time_list)
+    
 
     prediction = output.max(1, keepdim=True)[1]
-    print(prediction)
+    #print("Prediction: "+str(prediction))
+    #print(know_classes[int(prediction.item())])
 
     # print(model)
 
@@ -104,4 +131,4 @@ def cnn_predict(image):
 
 if __name__ == '__main__':
     none = ""
-    cnn_predict(none)
+    cnn_predict(sys.argv[1])
