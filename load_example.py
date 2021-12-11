@@ -10,12 +10,17 @@ from csv import writer
 import threading
 import time
 
+
+SEED = 1234
+torch.manual_seed(SEED)
+torch.cuda.manual_seed(SEED)
+
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 #print("CPU-based classification")
 
 time_list = []
 
-know_classes = ['bittorrent', 'brownsing','dns', 'IoT', 'rdp', 'ssh','voip']
+know_classes = ['bittorrent', 'browsing','dns', 'iot', 'rdp', 'ssh','voip']
 
 def initialize_model(model_name, num_classes, feature_extract, use_pretrained=True):
     # Inicializando cada variável específica para cada modelo
@@ -66,12 +71,12 @@ def get_cnn_complexity(model):
     print('{:<30}  {:<8}'.format('Number of parameters: ', params))
 
 def write_csv(register):
-    with open('exp_time_spent_on_prediction.csv', 'a') as f:
+    with open(str(sys.argv[2])+'_exp_time_spent_on_prediction.csv', 'a') as f:
         writer_object = writer(f)
         writer_object.writerow(register)
         f.close()
 
-def cnn_predict(image_name):
+def cnn_predict(image_name, class_to_test):
     # print("Imagem type: "+str(type(image)))
     model = cnn_start()
     train_transforms = transforms.Compose([
@@ -88,8 +93,10 @@ def cnn_predict(image_name):
         transforms.ToTensor(),
         transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
     ])
+    path = Path('/home/ubuntu/VINEVI/images_test/'+str(class_to_test)+'/'+str(image_name))
+    print("Caminho do load image: "+str(path))
 
-    image = Image.open(Path('/home/ubuntu/VINEVI/images_test/'+str(image_name)))
+    image = Image.open(Path('/home/ubuntu/VINEVI/images_test/'+str(class_to_test)+'/'+str(image_name)))
     # print("Image Type Load: "+str(type(image)))
 
     input = train_transforms(image)
@@ -109,7 +116,7 @@ def cnn_predict(image_name):
     
 
     prediction = output.max(1, keepdim=True)[1]
-    #print("Prediction: "+str(prediction))
+    print("Prediction: "+str(prediction))
     #print(know_classes[int(prediction.item())])
 
     # print(model)
@@ -131,4 +138,4 @@ def cnn_predict(image_name):
 
 if __name__ == '__main__':
     none = ""
-    cnn_predict(sys.argv[1])
+    print("Predicted: "+str(cnn_predict(sys.argv[1], sys.argv[2])))
