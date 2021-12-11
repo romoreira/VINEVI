@@ -6,7 +6,7 @@ import sys
 
 record = []
 
-List_Exp = ['time_stamp_begin', 'time_stamp_end','time_spent_on_prediction', 'predicted_class']
+List_Exp = ['time_stamp_begin', 'time_stamp_end','time_spent_on_prediction', 'predicted_class', 'image_name']
 with open(str(sys.argv[1])+'_exp_time_spent_on_prediction.csv', 'w') as f:
     writer_object = writer(f)
     writer_object.writerow(List_Exp)

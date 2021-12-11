@@ -100,7 +100,7 @@ def cnn_predict(image_name, class_to_test):
         transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
     ])
     path = Path('/home/ubuntu/VINEVI/images_test/'+str(class_to_test)+'/'+str(image_name))
-    print("Caminho do load image: "+str(path))
+    #print("Caminho do load image: "+str(path))
 
     image = Image.open(Path('/home/ubuntu/VINEVI/images_test/'+str(class_to_test)+'/'+str(image_name)))
     # print("Image Type Load: "+str(type(image)))
@@ -121,12 +121,13 @@ def cnn_predict(image_name, class_to_test):
     
 
     prediction = output.max(1, keepdim=True)[1]
-    print("Prediction: "+str(prediction))
+    #print("Prediction: "+str(prediction))
     #print(know_classes[int(prediction.item())])
 
     # print(model)
 
     time_list.append(know_classes[int(prediction.item())])
+    time_list.append(image_name)
     write_csv(time_list)
 
     return know_classes[int(prediction.item())]
