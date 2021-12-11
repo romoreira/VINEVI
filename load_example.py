@@ -147,4 +147,5 @@ def cnn_predict(image_name, class_to_test):
 
 if __name__ == '__main__':
     none = ""
-    print("Predicted: "+str(cnn_predict(sys.argv[1], sys.argv[2])))
+    #print("Predicted: "+str(cnn_predict(sys.argv[1], sys.argv[2])))
+    cnn_predict(sys.argv[1], sys.argv[2])
