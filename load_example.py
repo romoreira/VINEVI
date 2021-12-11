@@ -64,13 +64,13 @@ def set_parameter_requires_grad(model, feature_extracting):
 def cnn_start():
     model = 0
     input_size = 0
-    model_name = "squeezenet"
+    model_name = "alexnet"
     #print("Initializing CNN Model...")
     model, input_size = initialize_model(model_name, num_classes=7, feature_extract=True, use_pretrained=True)
 
     # print("Model before load: \n"+(str(model)))
 
-    checkpoint = torch.load(Path('/home/ubuntu/VINEVI/models_training/squeezenet.pth'), map_location='cpu')
+    checkpoint = torch.load(Path('/home/ubuntu/VINEVI/models_training/alexnet.pth'), map_location='cpu')
     model.load_state_dict(checkpoint)
     model.eval()
 
