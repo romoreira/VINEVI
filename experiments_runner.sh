@@ -12,3 +12,4 @@ done
 kill $(pgrep -f 'python3 hardware_monitoring.py')
 kill $(pgrep -f 'python3 load_example.py')
 echo "End of experiments"
+
