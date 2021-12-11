@@ -34,6 +34,20 @@ def initialize_model(model_name, num_classes, feature_extract, use_pretrained=Tr
         model_ft.num_classes = num_classes
         input_size = 224
 
+    elif model_name == "mobilenet":
+      model_ft = models.mobilenet_v2(pretrained=use_pretrained)
+      set_parameter_requires_grad(model_ft, feature_extract)
+      num_ftrs = model_ft.classifier[1].in_features
+      model_ft.classifier[1] = nn.Linear(num_ftrs,num_classes)
+      input_size = 224
+
+    elif model_name == "alexnet":
+      model_ft = models.alexnet(pretrained=use_pretrained)
+      set_parameter_requires_grad(model_ft, feature_extract)
+      num_ftrs = model_ft.classifier[6].in_features
+      model_ft.classifier[6] = nn.Linear(num_ftrs,num_classes)
+      input_size = 224
+
     else:
         print("Invalid model name, exiting...")
         exit()
@@ -79,14 +93,6 @@ def write_csv(register):
 def cnn_predict(image_name, class_to_test):
     # print("Imagem type: "+str(type(image)))
     model = cnn_start()
-    train_transforms = transforms.Compose([
-        transforms.Resize(size=[224, 224]),
-        transforms.RandomRotation([0, 360]),
-        transforms.RandomVerticalFlip(),
-        transforms.RandomHorizontalFlip(),
-        transforms.ToTensor(),
-        transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
-    ])
 
     test_transforms = transforms.Compose([
         transforms.Resize(size=[224, 224]),
@@ -99,7 +105,7 @@ def cnn_predict(image_name, class_to_test):
     image = Image.open(Path('/home/ubuntu/VINEVI/images_test/'+str(class_to_test)+'/'+str(image_name)))
     # print("Image Type Load: "+str(type(image)))
 
-    input = train_transforms(image)
+    input = test_transforms(image)
     #print('types:', type(input))
     #print("Transformd Image: " + str(input.shape))
     input = torch.unsqueeze(input, 0)
