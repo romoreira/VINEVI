@@ -112,7 +112,6 @@ def cnn_predict(image_name, class_to_test):
     time_list.append(before_predict_time)
     time_list.append(after_predict_time)
     time_list.append(after_predict_time - before_predict_time)
-    write_csv(time_list)
     
 
     prediction = output.max(1, keepdim=True)[1]
@@ -120,6 +119,9 @@ def cnn_predict(image_name, class_to_test):
     #print(know_classes[int(prediction.item())])
 
     # print(model)
+
+    time_list.append(know_classes[int(prediction.item())])
+    write_csv(time_list)
 
     return know_classes[int(prediction.item())]
 
