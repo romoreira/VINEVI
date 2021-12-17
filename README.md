@@ -27,4 +27,9 @@ Thats all folks!
 
 ## Embeding CNN models on Low-cost devices Experiments:
 
+* ```pip3 install psutil```
+* ```pip3 install Pillow```
+* ```pip3 install tensorflow```
+* ```pip3 install torch```
+
 * ```./runner.sh```
