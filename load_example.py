@@ -41,6 +41,13 @@ def initialize_model(model_name, num_classes, feature_extract, use_pretrained=Tr
       model_ft.classifier[1] = nn.Linear(num_ftrs,num_classes)
       input_size = 224
 
+    elif model_name == "resnet":
+      model_ft = models.resnet18(pretrained=use_pretrained)
+      set_parameter_requires_grad(model_ft, feature_extract)
+      num_ftrs = model_ft.fc.in_features
+      model_ft.fc = nn.Linear(num_ftrs, num_classes)
+      input_size = 224
+
     elif model_name == "alexnet":
       model_ft = models.alexnet(pretrained=use_pretrained)
       set_parameter_requires_grad(model_ft, feature_extract)
@@ -64,13 +71,14 @@ def set_parameter_requires_grad(model, feature_extracting):
 def cnn_start():
     model = 0
     input_size = 0
-    model_name = "alexnet"
+    model_name = "mobilenet"
     #print("Initializing CNN Model...")
     model, input_size = initialize_model(model_name, num_classes=7, feature_extract=True, use_pretrained=True)
 
     # print("Model before load: \n"+(str(model)))
 
-    checkpoint = torch.load(Path('/home/ubuntu/VINEVI/models_training/alexnet.pth'), map_location='cpu')
+    #checkpoint = torch.load(Path('/home/ubuntu/VINEVI/models_training/resnet.pth'), map_location='cpu')
+    checkpoint = torch.load(Path('/home/rodrigo/PycharmProjects/VINEVI/models_training/mobilenet.pth'))
     model.load_state_dict(checkpoint)
     model.eval()
 
@@ -99,10 +107,10 @@ def cnn_predict(image_name, class_to_test):
         transforms.ToTensor(),
         transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
     ])
-    path = Path('/home/ubuntu/VINEVI/images_test/'+str(class_to_test)+'/'+str(image_name))
+    path = Path('/home/rodrigo/PycharmProjects/VINEVI/images_test/'+str(class_to_test)+'/'+str(image_name))
     #print("Caminho do load image: "+str(path))
 
-    image = Image.open(Path('/home/ubuntu/VINEVI/images_test/'+str(class_to_test)+'/'+str(image_name)))
+    image = Image.open(Path('/home/rodrigo/PycharmProjects/VINEVI/images_test/'+str(class_to_test)+'/'+str(image_name)))
     # print("Image Type Load: "+str(type(image)))
 
     input = test_transforms(image)

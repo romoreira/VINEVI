@@ -33,9 +33,10 @@ while True:
     disk = psutil.disk_io_counters()
     disk_read_count = disk[0]
     disk_write_count = disk[1]
-    temperature = dict(psutil.sensors_temperatures().items())
-    temperature = temperature.get("cpu_thermal")[0][1]
-  
+    #temperature = dict(psutil.sensors_temperatures().items())
+    #temperature = temperature.get("cpu_thermal")[0][1]
+    temperature = "NA"
+
     record.append(time_stamp)
     record.append(cpu_util)
     record.append(ctx_switches)
