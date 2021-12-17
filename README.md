@@ -23,3 +23,8 @@
 - Testing API: ```curl --form "image=@/home/rodrigo/Desktop/test-image.png" http://52.146.40.114:8080/aioracle```
 
 Thats all folks!
+
+
+## Embeding CNN models on Low-cost devices Experiments:
+
+* ```./runner.sh```
