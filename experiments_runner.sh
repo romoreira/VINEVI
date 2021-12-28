@@ -9,8 +9,7 @@ for eachfile in $yourfilenames
 do
    python3 load_example.py $eachfile "bittorrent"
 done
-kill $(pgrep -f 'python3 hardware_monitoring.py')
-kill $(pgrep -f 'python3 load_example.py')
+pkill -f hardware_monitoring.py
 echo "End of experiments Bittorrent"
 
 python3 hardware_monitoring.py "browsing" &
@@ -21,8 +20,7 @@ for eachfile in $yourfilenames
 do
    python3 load_example.py $eachfile "browsing"
 done
-kill $(pgrep -f 'python3 hardware_monitoring.py')
-kill $(pgrep -f 'python3 load_example.py')
+pkill -f hardware_monitoring.py
 echo "End of experiments Browsing"
 
 python3 hardware_monitoring.py "dns" &
@@ -33,8 +31,7 @@ for eachfile in $yourfilenames
 do
    python3 load_example.py $eachfile "dns"
 done
-kill $(pgrep -f 'python3 hardware_monitoring.py')
-kill $(pgrep -f 'python3 load_example.py')
+pkill -f hardware_monitoring.py
 echo "End of experiments DNS"
 
 python3 hardware_monitoring.py "iot" &
@@ -45,8 +42,7 @@ for eachfile in $yourfilenames
 do
    python3 load_example.py $eachfile "iot"
 done
-kill $(pgrep -f 'python3 hardware_monitoring.py')
-kill $(pgrep -f 'python3 load_example.py')
+pkill -f hardware_monitoring.py
 echo "End of experiments IoT"
 
 python3 hardware_monitoring.py "rdp" &
@@ -57,8 +53,7 @@ for eachfile in $yourfilenames
 do
    python3 load_example.py $eachfile "rdp"
 done
-kill $(pgrep -f 'python3 hardware_monitoring.py')
-kill $(pgrep -f 'python3 load_example.py')
+pkill -f hardware_monitoring.py
 echo "End of experiments RDP"
 
 python3 hardware_monitoring.py "ssh" &
@@ -69,8 +64,7 @@ for eachfile in $yourfilenames
 do
    python3 load_example.py $eachfile "ssh"
 done
-kill $(pgrep -f 'python3 hardware_monitoring.py')
-kill $(pgrep -f 'python3 load_example.py')
+pkill -f hardware_monitoring.py
 echo "End of experiments SSH"
 
 
@@ -82,6 +76,5 @@ for eachfile in $yourfilenames
 do
    python3 load_example.py $eachfile "voip"
 done
-kill $(pgrep -f 'python3 hardware_monitoring.py')
-kill $(pgrep -f 'python3 load_example.py')
+pkill -f hardware_monitoring.py
 echo "End of experiments VOIP"

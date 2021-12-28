@@ -53,5 +53,6 @@ while True:
         writer_object = writer(f)
         writer_object.writerow(record)
         f.close()
+        #print("Hardware status recorded")
     time.sleep(1)
      
